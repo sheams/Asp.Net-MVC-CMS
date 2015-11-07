@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using AspNetMvcCms.Models;
+using AspNetMvcCms.App_Code;
+using System.Web.Security;
 
 namespace AspNetMvcCms.Controllers
 {
@@ -26,6 +28,116 @@ namespace AspNetMvcCms.Controllers
         }
 
         public UserManager<ApplicationUser> UserManager { get; private set; }
+        public RoleManager<IdentityRole>  RoleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
+
+        [AllowAnonymous]
+        public async Task<ActionResult> Setup()
+        {
+            string message = "";
+            string errorMessage = "";
+
+            if (UserManager.FindByName(Constants.AdminUserName) == null)
+            {
+                var user = new ApplicationUser() { UserName = Constants.AdminUserName };
+                var result = await UserManager.CreateAsync(user, Constants.AdminUserPassword);
+                if (result.Succeeded)
+                {
+                    message = "User Create successful.<br/> ";
+                }
+                else
+                {
+                    errorMessage = "Setup failed <br/>";
+                }
+            }
+            else
+            {
+                errorMessage += "User already exists <br/>";
+            }
+
+            if (RoleManager.FindByName(SiteUserRoles.Administrator) == null)
+            {
+                var role = new IdentityRole(){
+                    Name = SiteUserRoles.Administrator
+                };
+                var result = RoleManager.Create(role);
+                if (result.Succeeded)
+                {
+                    message = message + " Role created. <br/>"; 
+                }
+            }
+            else
+            {
+                errorMessage += "Role already exists <br/>";
+            }
+
+            if (RoleManager.FindByName(SiteUserRoles.Modaretor) == null)
+            {
+                var role = new IdentityRole()
+                {
+                    Name = SiteUserRoles.Modaretor
+                };
+                var result = RoleManager.Create(role);
+                if (result.Succeeded)
+                {
+                    message = message + " Role Moderator created. <br/>";
+                }
+            }
+            else
+            {
+                errorMessage += "Role Moderator already exists <br/>";
+            }
+
+            if (RoleManager.FindByName(SiteUserRoles.Editor) == null)
+            {
+                var role = new IdentityRole()
+                {
+                    Name = SiteUserRoles.Editor
+                };
+                var result = RoleManager.Create(role);
+                if (result.Succeeded)
+                {
+                    message = message + " Role Editor created. <br/>";
+                }
+            }
+            else
+            {
+                errorMessage += "Role Editor already exists <br/>";
+            }
+
+            if (RoleManager.FindByName(SiteUserRoles.Reader) == null)
+            {
+                var role = new IdentityRole()
+                {
+                    Name = SiteUserRoles.Reader
+                };
+                var result = RoleManager.Create(role);
+                if (result.Succeeded)
+                {
+                    message = message + " Role Reader created. <br/>";
+                }
+            }
+            else
+            {
+                errorMessage += "Role Reader already exists <br/>";
+            }
+
+            var usr = UserManager.FindByName(Constants.AdminUserName);
+
+            if (usr != null && UserManager.GetRoles(usr.Id).Count>0)
+            {
+                errorMessage += "Role already assigned. <br/>";
+            }
+            else
+            {
+
+                UserManager.AddToRole(usr.Id, SiteUserRoles.Administrator);
+                message = message + " Role assigned. <br/>"; 
+            }
+       
+            ViewBag.ErrorMessage = errorMessage;
+            ViewBag.Message = message;
+            return View();
+        }
 
         //
         // GET: /Account/Login

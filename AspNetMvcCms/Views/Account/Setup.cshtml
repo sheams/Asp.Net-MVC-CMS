@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "Setup";
+}
+
+<h2>Setup</h2>
+
+<div>
+    @if (ViewBag.Message != null)
+    {
+        <span style="color:Green;">@Html.Raw(ViewBag.Message)</span>
+    }
+</div>
+
+<div>
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <span style="color:red;">@Html.Raw(ViewBag.ErrorMessage)</span>
+    }
+</div>
+
+

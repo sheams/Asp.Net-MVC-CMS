@@ -1,3 +1,6 @@
 packages
 bin
 obj
+*.ldf
+ASPNETDB_TMP.MDF
+ASPNETDB.MDF
