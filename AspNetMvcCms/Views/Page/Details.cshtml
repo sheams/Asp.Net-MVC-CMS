@@ -1,0 +1,31 @@
+﻿@model AspNetMvcCms.Models.Page
+
+@if(Model == null)
+{
+    <h2>Page not found.</h2>
+    return;
+}
+
+@{
+    ViewBag.Title = Model.Title;
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.Title</h2>
+
+<div>
+    <hr />
+    <div class="page-content">
+        @if (ViewBag.BodyText != null)
+        {
+            <div>@Html.Raw(ViewBag.BodyText)</div>
+        }
+        else
+        {
+            <h4>No page data</h4>
+        }
+    </div>   
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>
