@@ -81,6 +81,8 @@ namespace AspNetMvcCms.Areas.Admin.Controllers
             {
                 return HttpNotFound();
             }
+            var bodyText = Encoding.UTF8.GetString(page.Body);
+            ViewBag.Text = bodyText;
             return View(page);
         }
 
@@ -89,14 +91,33 @@ namespace AspNetMvcCms.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,MetaKeyword,MetaDescription,ShortDescription,Body,CreationDate,ModificationDate,CreateBy,ModifyBy,Status")] Page page)
+        [ValidateInput(false)]
+        public ActionResult Edit([Bind(Include = "Id,Title,MetaKeyword,MetaDescription,ShortDescription,Body,Status")] Page page, string bodyText)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(page).State = EntityState.Modified;
-                db.SaveChanges();
+              var oldPage = db.Pages.Find(page.Id);
+
+               if(oldPage != null)
+                {
+                    oldPage.Title = page.Title;
+                    oldPage.MetaDescription = page.MetaDescription;
+                    oldPage.MetaKeyword = page.MetaKeyword;
+                    oldPage.ShortDescription = page.ShortDescription;
+                    oldPage.Status = page.Status;
+                    db.Entry(oldPage).State = EntityState.Modified;
+                    var htmBody = Encoding.UTF8.GetBytes(bodyText);
+                    oldPage.Body = htmBody;
+                    db.SaveChanges();
+                }
+               else
+                {
+                    ViewBag.ErrorMessage = "Method Not Found";
+                    return View(page);
+                }
                 return RedirectToAction("Index");
             }
+
             return View(page);
         }
 

@@ -206,12 +206,12 @@
     <Content Include="Areas\Admin\Views\AdminHome\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Areas\Admin\Views\SiteUser\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\SiteUser\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Pages\Create.cshtml" />
     <Content Include="Areas\Admin\Views\Pages\Delete.cshtml" />
     <Content Include="Areas\Admin\Views\Pages\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Pages\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Pages\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SiteUser\Index.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
